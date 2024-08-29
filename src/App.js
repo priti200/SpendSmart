@@ -1,20 +1,43 @@
+import { useState } from 'react';
 import './App.css';
 
 function App() {
+
+  const [name,setName] = useState("");
+  const [dateTime,setDateTime] = useState("");
+  const [description,setDescription] = useState("");
+
+
+  function addNewTransaction(){
+    const url=process.env.REACT_APP_API_URL;
+    fetch(url);
+    // System.preventDefault();
+  }
   return(
     <main>
       <h1>
         400<span>.00</span>{" "}
       </h1>
 
-      <form action="">
+      <form 
+        onSubmit={addNewTransaction}
+      >
         <div className="basic">
-          <input type="text" placeholder={"20000 mobile"} />
-          <input type="datetime-local" />
+          <input type="text" 
+          value={name}
+          onChange={event => setName(event.target.value)}
+          placeholder={"20000 mobile"} />
+          <input type="datetime-local"
+          value={dateTime}
+          onChange={event => setDateTime(event.target.value)}
+          />
         </div>
         
         <div className="description">
-          <input type="text" placeholder={"description"} />
+          <input type="text" 
+          value={description}
+          onChange={event => setDescription(event.target.value)}
+          placeholder={"description"} />
         </div>
 
         <button>Add new transaction</button>
