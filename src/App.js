@@ -1,108 +1,47 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { TransactionProvider } from './contexts/TransactionContext';
+import { BudgetProvider } from './contexts/BudgetContext';
+import { AIProvider } from './contexts/AIContext';
+import Sidebar from './components/Sidebar/Sidebar';
+import MainContent from './components/MainContent/MainContent';
+import AIChatButton from './components/AI/AIChatButton';
 import './App.css';
 
 function App() {
+  const [activeView, setActiveView] = useState('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const [name,setName] = useState("");
-  const [dateTime,setDateTime] = useState("");
-  const [description,setDescription] = useState("");
+  const handleViewChange = (view) => {
+    setActiveView(view);
+  };
 
+  const handleSidebarToggle = (collapsed) => {
+    setSidebarCollapsed(collapsed);
+  };
 
-  function addNewTransaction(){
-    const url=process.env.REACT_APP_API_URL;
-    fetch(url);
-    // System.preventDefault();
-  }
-  return(
-    <main>
-      <h1>
-        400<span>.00</span>{" "}
-      </h1>
-
-      <form 
-        onSubmit={addNewTransaction}
-      >
-        <div className="basic">
-          <input type="text" 
-          value={name}
-          onChange={event => setName(event.target.value)}
-          placeholder={"20000 mobile"} />
-          <input type="datetime-local"
-          value={dateTime}
-          onChange={event => setDateTime(event.target.value)}
+  return (
+    <TransactionProvider>
+      <BudgetProvider>
+        <AIProvider>
+        <div className="app desktop-layout">
+          <Sidebar
+            activeView={activeView}
+            onViewChange={handleViewChange}
+            onToggle={handleSidebarToggle}
           />
+          <MainContent
+            activeView={activeView}
+            onViewChange={handleViewChange}
+            sidebarCollapsed={sidebarCollapsed}
+          />
+
+          {/* AI Chat Button */}
+          <AIChatButton />
         </div>
-        
-        <div className="description">
-          <input type="text" 
-          value={description}
-          onChange={event => setDescription(event.target.value)}
-          placeholder={"description"} />
-        </div>
-
-        <button>Add new transaction</button>
-      </form>
-
-      <div className="transactions">
-        <div className="transaction">
-          <div className="left">
-            <div className="name">New Laptop</div>
-            <div className="description">It was the time to buy new Laptop, Older one was damaged.</div>
-          </div>
-
-          <div className="right">
-            <div className="price red">50,000</div>
-            <div className="datetime">01-05-2024</div>
-
-          </div>
-
-        </div>
-        <div className="transaction">
-          <div className="left">
-            <div className="name">New Laptop</div>
-            <div className="description">It was the time to buy new Laptop, Older one was damaged.</div>
-          </div>
-
-          <div className="right">
-            <div className="price green">50,000</div>
-            <div className="datetime">01-05-2024</div>
-
-          </div>
-
-        </div>
-
-        <div className="transaction">
-          <div className="left">
-            <div className="name">New Laptop</div>
-            <div className="description">It was the time to buy new Laptop, Older one was damaged.</div>
-          </div>
-
-          <div className="right">
-            <div className="price red">50,000</div>
-            <div className="datetime">01-05-2024</div>
-
-          </div>
-
-        </div>
-        <div className="transaction">
-          <div className="left">
-            <div className="name">New Laptop</div>
-            <div className="description">It was the time to buy new Laptop, Older one was damaged.</div>
-          </div>
-
-          <div className="right">
-            <div className="price green">50,000</div>
-            <div className="datetime">01-05-2024</div>
-
-          </div>
-
-        </div>
-
-
-      </div>
-    </main>
-  )
-  
+        </AIProvider>
+      </BudgetProvider>
+    </TransactionProvider>
+  );
 }
 
 export default App;
